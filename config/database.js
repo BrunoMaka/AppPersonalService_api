@@ -6,5 +6,5 @@ mongoose.connect('mongodb://localhost/AppPersonalService', {
   useUnifiedTopology: true,
   useCreateIndex: true
 }
-).then(() => console.log('connection succesful'))
+).then(() => console.log('connection succesful - mongoose & mondodb'))
   .catch((err) => console.error(err));
