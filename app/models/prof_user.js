@@ -38,4 +38,14 @@ profUserSchema.pre('save', function (next) {
     }
 })
 
+profUserSchema.methods.isCorrectPassword = function (password, callback) {
+    bcrypt.compare(password, this.password, function (err, same) {
+        if (err) {
+            callback(err);
+        } else {
+            callback(err, same);
+        }
+    })
+}
+
 module.exports = mongoose.model('ProfUser', profUserSchema);
