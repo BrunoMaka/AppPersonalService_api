@@ -5,7 +5,7 @@ const user_withAuth = require('../middlewares/main_user_auth');
 
 router.post('/:id', user_withAuth, async (req, res) => {
   const { class_type, isRemote, class_date, class_time } = req.body;
-  const { id } = req.params;
+  const { id } = req.params;  
   var service_class = new ServiceClass({
     class_type: class_type, 
     isRemote: isRemote, 

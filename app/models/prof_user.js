@@ -24,14 +24,12 @@ var profUserSchema = new mongoose.Schema({
         required: true
     },
 
-    locals_affiliate: [
-        {
-        local: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'LocalUser',
-            default: null            
-        }
-    }]
+    local_affiliate: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'LocalUser',
+        default: null   
+    }
+        
 });
 
 profUserSchema.pre('save', function (next) {

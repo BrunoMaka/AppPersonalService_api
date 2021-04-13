@@ -16,8 +16,7 @@ var serviceClassSchema = new mongoose.Schema({
     professional: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ProfUser',
-        required: true
-    }
+        required: true}     
   });
 
   module.exports = mongoose.model('ServiceClass', serviceClassSchema);

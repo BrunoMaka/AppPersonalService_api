@@ -7,9 +7,11 @@ const secret = process.env.JWT_TOKEN;
 const prof_withAuth = require('../middlewares/prof_user_auth');
 const ServiceClass = require('../models/service_class.js');
 
-router.post('/register', async (req, res) => {
+router.post('/register/:id', async (req, res) => {
+  const { id } = req.params
   const { firstname, lastname, email, password } = req.body;
-  const prof_user = new ProfUser({ firstname, lastname, email, password });
+  const prof_user = new ProfUser({ firstname, lastname, email, password, local_affiliate:id});
+  
 
   try {
     await prof_user.save();
