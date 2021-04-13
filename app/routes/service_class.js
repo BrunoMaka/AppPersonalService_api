@@ -25,7 +25,7 @@ router.post('/:id', user_withAuth, async (req, res) => {
 
 router.get('/:id', user_withAuth, async (req, res) => {
   try {
-    const { id, professional } = req.params;
+    const { id } = req.params;
     let service_class = await ServiceClass.findById(id);
     if(is_owner(req.main_user, service_class)) {
       res.json(service_class);    
@@ -33,8 +33,17 @@ router.get('/:id', user_withAuth, async (req, res) => {
         res.status(403).json({error: 'Problem to get a service'})   
     }
   } catch (error) {
-    res.status(500).json({error: 'Problem to get a service'}) 
+      res.status(500).json({error: 'Problem to get a service'}) 
   }  
+});
+
+router.get('/', user_withAuth, async (req, res) => {
+  try {
+    let services = await ServiceClass.find({author: req.main_user._id })
+    res.send(services)
+  } catch (error) {
+      res.status(500).json({error: 'Problem to show all services'})
+  }
 });
 
 const is_owner = (user, service) => {
