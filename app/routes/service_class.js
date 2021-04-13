@@ -58,7 +58,23 @@ router.put('/:id', user_withAuth, async (req, res) => {
     res.json(service);
 
   } catch (error) {
-    res.status(500).json({error: 'Problem to update the service'})
+      res.status(500).json({error: 'Problem to update the service'})
+  }
+});
+
+router.delete('/:id', user_withAuth, async (req, res) => {
+  const { id } = req.params;
+  let service = await ServiceClass.findById(id)
+  try {
+    if(service && is_owner(req.main_user, service)) {
+      await service.delete();
+      res.json({message: 'OK'}).status(204);
+
+    } else {
+      res.json({error: 'Forbidden'}).status(403)
+    }
+  } catch (error) {
+      res.status(500).json({error: 'Problem to delete the service'})
   }
 });
 
