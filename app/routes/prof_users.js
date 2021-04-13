@@ -4,6 +4,8 @@ const ProfUser = require('../models/prof_user.js');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const secret = process.env.JWT_TOKEN;
+const prof_withAuth = require('../middlewares/prof_user_auth');
+const ServiceClass = require('../models/service_class.js');
 
 router.post('/register', async (req, res) => {
   const { firstname, lastname, email, password } = req.body;
@@ -33,11 +35,49 @@ router.post('/login', async (req, res) => {
         } 
       });     
     }
-
-
+  
   } catch (error) {
     res.status(500).json({error: 'Internal error please try again'});
   }
 });
+
+
+
+router.get('/:id', prof_withAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    let service_class = await ServiceClass.findById(id);
+    if(belongsTo(req.prof_user, service_class)) {
+      res.json(service_class);    
+    } else {
+        res.status(403).json({error: 'Problem to get a service'})   
+    }
+  } catch (error) {
+    res.status(500).json({error: 'Problem to get a service'}) 
+  }  
+});
+
+const belongsTo = (user, service) => {
+  if(JSON.stringify(user._id) == JSON.stringify(service.professional._id))
+    return true;
+  else
+    return false;
+}
+
+// ROTA PARA INCLUIR LOCAL NO USUARIO PROF
+// router.put('/:id', prof_withAuth, async(req, res) => {
+//   const { id } = req.params;
+//   const prof = req.headers['x-access-token'];
+//   try {
+//     let prof_user = await ProfUser.findOneAndUpdate({ prof }, { $push: { locals_affiliate: id } })      
+//       .then(x => {
+//         res.status(200).json(prof_user).send({
+//           message: 'Local added'
+//         });
+//       })
+//   } catch (error) {
+//     res.status(500).json({error: 'Cant add the local'})    
+//   }
+// })
 
 module.exports = router;

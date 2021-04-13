@@ -1,3 +1,5 @@
+//CRIAR MÉTODO PARA ADICIONAR LOCAL VINCULADO AO PROFISSIONAL
+
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
@@ -21,6 +23,15 @@ var profUserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+
+    locals_affiliate: [
+        {
+        local: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'LocalUser',
+            default: null            
+        }
+    }]
 });
 
 profUserSchema.pre('save', function (next) {
@@ -47,5 +58,7 @@ profUserSchema.methods.isCorrectPassword = function (password, callback) {
         }
     })
 }
+
+
 
 module.exports = mongoose.model('ProfUser', profUserSchema);

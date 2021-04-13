@@ -1,9 +1,10 @@
 require('dotenv').config();
 const secret = process.env.JWT_TOKEN;
 const jwt = require('jsonwebtoken')
-const MainUser = require('../models/main_user.js');
+const ProfUser = require('../models/prof_user.js');
 
-const user_withAuth = (req, res, next) => {
+
+const prof_withAuth = (req, res, next) => {
     const token = req.headers['x-access-token'];
     if (!token) {
         res.status(401).json({error: 'Unauthorized: No token provided'});
@@ -13,10 +14,10 @@ const user_withAuth = (req, res, next) => {
                 res.status(401).send('Unauthorized: Invalid token');
             } else {
               req.email = decoded.email;
-              MainUser
+              ProfUser
               .findOne({email: decoded.email })
-              .then(main_user => {
-                  req.main_user = main_user
+              .then(prof_user => {
+                  req.prof_user = prof_user
                   next();
               }).catch(err => {
                   res.status(401).send(err);
@@ -27,4 +28,4 @@ const user_withAuth = (req, res, next) => {
     }
 };
 
-module.exports = user_withAuth;
+module.exports = prof_withAuth;
