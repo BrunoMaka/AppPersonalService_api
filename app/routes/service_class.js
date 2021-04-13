@@ -46,6 +46,22 @@ router.get('/', user_withAuth, async (req, res) => {
   }
 });
 
+router.put('/:id', user_withAuth, async (req, res) => {
+  const { isRemote, class_date, class_time } = req.body;
+  const { id } = req.params;
+  try {
+    var service = await ServiceClass.findOneAndUpdate(
+      {_id: id}, 
+      { $set: { isRemote: isRemote, class_date: class_date, class_time:class_time }}, 
+      { upsert: true, 'new': true }
+    )
+    res.json(service);
+
+  } catch (error) {
+    res.status(500).json({error: 'Problem to update the service'})
+  }
+});
+
 const is_owner = (user, service) => {
   if(JSON.stringify(user._id) == JSON.stringify(service.author._id))
     return true;
