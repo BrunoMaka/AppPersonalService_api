@@ -59,6 +59,15 @@ router.get('/:id', prof_withAuth, async (req, res) => {
   }  
 });
 
+router.get('/', prof_withAuth, async (req, res) => {
+  try {
+    let services = await ServiceClass.find({professional: req.prof_user._id })
+    res.send(services)
+  } catch (error) {
+      res.status(500).json({error: 'Problem to show all services'})
+  }
+});
+
 const belongsTo = (user, service) => {
   if(JSON.stringify(user._id) == JSON.stringify(service.professional._id))
     return true;
