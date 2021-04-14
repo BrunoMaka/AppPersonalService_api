@@ -19,4 +19,6 @@ var serviceClassSchema = new mongoose.Schema({
         required: true}     
   });
 
+  serviceClassSchema.index({'class_type':'text'})
+
   module.exports = mongoose.model('ServiceClass', serviceClassSchema);

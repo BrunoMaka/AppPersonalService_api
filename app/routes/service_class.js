@@ -46,6 +46,16 @@ router.get('/', user_withAuth, async (req, res) => {
   }
 });
 
+router.get('/search', user_withAuth, async (req, res) => {
+  const { query } = req.query;
+  try {
+    let services = await ServiceClass.find({author: req.main_user._id }).find({$text: {$search: query}})
+    res.json(services);
+  } catch (error) {
+      res.json({error: 'query not found'}).status(500);
+  }
+});
+
 router.put('/:id', user_withAuth, async (req, res) => {
   const { isRemote, class_date, class_time } = req.body;
   const { id } = req.params;
@@ -77,6 +87,8 @@ router.delete('/:id', user_withAuth, async (req, res) => {
       res.status(500).json({error: 'Problem to delete the service'})
   }
 });
+
+
 
 const is_owner = (user, service) => {
   if(JSON.stringify(user._id) == JSON.stringify(service.author._id))
